@@ -12,7 +12,7 @@
     <div th:replace="~{base :: pageTitle ('Novo Pedido')}"></div>
 
     <div class="card mt-3">
-        <form th:object="${requestOrder}" class="card-body" action="/order/save" method="post">
+        <form th:action="@{/order/save}" th:object="${requestOrder}" class="card-body" method="post">
             <div class="mb-3">
                 <label class="form-label" for="orderName">Produto</label>
 
