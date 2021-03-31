@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{base :: head ('Últimos Pedidos')}"></head>
+<head th:replace="~{base :: head ('Pedidos')}"></head>
 
 <body>
 
@@ -9,13 +9,50 @@
 
 <div class="container">
 
-    <div th:replace="~{base :: pageTitle ('Últimos Pedidos')}"></div>
+    <div th:replace="~{base :: pageTitle ('Meus Pedidos')}"></div>
 
-    <div class="card mb-3 mt-3" th:each="order : ${orders}">
+    <nav class="navbar navbar-expand navbar-light bg-light mb-3">
+        <div class="container-fluid">
+            <div class="navbar-nav">
+                <a th:classappend="${status == null ? 'active' : ''}" class="nav-link" th:href="@{/user/orders}">Todos</a>
 
-        <div class="card-header alert alert-dark" th:text="${order.orderName}">
-            Nome do poduto
-        </div>
+                <a th:classappend="${status == 'waiting' ? 'active' : ''}" class="nav-link"
+                   th:href="@{/user/orders/waiting}">
+                    Aguardando
+                </a>
+
+                <a th:classappend="${status == 'approved' ? 'active' : ''}" class="nav-link"
+                   th:href="@{/user/orders/approved}">
+                    Aprovado
+                </a>
+
+                <a th:classappend="${status == 'delivered' ? 'active' : ''}" class="nav-link"
+                   th:href="@{/user/orders/delivered}">
+                    Entregue
+                </a>
+            </div> <!-- navbar-nav -->
+
+            <div class="d-flex">
+                <a href="/order/create">
+                    <button class="btn btn-outline-secondary">Novo</button>
+                </a>
+            </div> <!-- end d-flex -->
+        </div> <!-- end container-fluid -->
+    </nav> <!-- end navbar -->
+
+    <div class="card mb-3" th:each="order : ${orders}">
+
+        <th:block th:switch="${order.status.name()}">
+            <div th:case="'WAITING'" class="card-header alert alert-warning" th:text="${order.orderName}">
+                Nome do poduto
+            </div>
+            <div th:case="'APPROVED'" class="card-header alert alert-success" th:text="${order.orderName}">
+                Nome do poduto
+            </div>
+            <div th:case="'DELIVERED'" class="card-header alert alert-dark" th:text="${order.orderName}">
+                Nome do poduto
+            </div>
+        </th:block>
 
         <div class="card-body">
             <div class="row">
