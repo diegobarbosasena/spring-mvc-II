@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{base :: head ('Últimos Pedidos')}"></head>
+<head th:replace="~{base :: head ('Ofertas')}"></head>
 
-<body>
+<body onload="onLoad()">
 
 <div th:replace="~{base :: logo}"></div>
 
-<div class="container">
+<div class="container" id="offer">
 
-    <div th:replace="~{base :: pageTitle ('Últimos Pedidos')}"></div>
+    <div th:replace="~{base :: pageTitle ('Ofertas')}"></div>
 
-    <div class="card mb-3 mt-3" th:each="order : ${orders}">
+    <div class="card mb-3 mt-3" v-for="order in orders">
 
-        <div class="card-header alert alert-dark" th:text="${order.orderName}">
-            Nome do poduto
-        </div>
+        <div class="card-header alert alert-dark">{{ order.orderName }}</div>
 
         <div class="card-body">
             <div class="row">
@@ -23,44 +21,60 @@
 
                     <div class="row">
                         <div class="col-md-5">
-                            Valor:
-                            <span th:if="${order.negotiatedValue != null}"
-                                  th:text="'R$ ' + ${#numbers.formatDecimal(order.negotiatedValue, 3, 'POINT', 2, 'COMMA')}">
-                                20000000,00
-                            </span>
+                            <label for="negotiatedValue">Valor:</label>
+                            <input class="form-control" type="text" id="negotiatedValue"/>
                         </div>
 
-                        <div class="col-md-7">
-                            Data de entrega:
-                            <span th:text="${#temporals.format(order.deliveryDate, 'dd/MM/yyyy')}">29/11/1993</span>
+                        <div class="col-auto">
+                            <label for="deliveryDate">Data de entrega:</label>
+                            <input class="form-control" type="date" id="deliveryDate">
                         </div>
                     </div> <!-- end row -->
 
-                    <div>Produto</div>
+                    <div class="my-3">Produto:</div>
 
-                    <div>
+                    <div class="mb-3">
                         <label for="orderUrl"></label>
-                        <input class="form-control" th:value="${order.orderUrl}" id="orderUrl"/>
+                        <a v-bind:href="order.orderUrl" id="orderUrl">{{ order.orderName }}</a>
                     </div>
 
-                    <div>Descrição</div>
+                    <div>Descrição:</div>
 
                     <div>
                         <label for="description"></label>
-                        <textarea class="form-control" th:text="${order.description}" id="description" cols="30"
-                                  rows="10">descriçao do pedido</textarea>
+                        <textarea class="form-control" id="description" cols="30" rows="10">
+                            {{ order.description }}
+                        </textarea>
                     </div>
 
                 </div> <!-- end col-12 -->
 
                 <div class="col-12 col-sm-4">
                     <div>
-                        <img class="img-thumbnail" th:src="${order.orderImage}" alt="order image">
+                        <img class="img-thumbnail" v-bind:src="order.orderImage" alt="order image">
                     </div>
                 </div> <!-- end col-12 -->
             </div> <!-- end row -->
         </div> <!-- end card-body -->
     </div> <!--- end card -->
 </div> <!-- end container -->
+
+<script>
+    function onLoad() {
+        var app = new Vue({
+            el: '#offer',
+            data: {
+                orders: []
+            },
+            mounted() {
+                axios
+                    .get('http://localhost:8080/api/orders/waiting')
+                    .then(response => (this.orders = response.data))
+            }
+        })
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>
 </html>

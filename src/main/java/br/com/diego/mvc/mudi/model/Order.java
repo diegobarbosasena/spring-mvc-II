@@ -1,14 +1,14 @@
 package br.com.diego.mvc.mudi.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "`order`")
-@JsonIgnoreProperties({"user"})
 public class Order {
 
     @Id
@@ -26,7 +26,11 @@ public class Order {
     private OrderStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private User user;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", fetch = FetchType.LAZY)
+    private List<Offer> offers;
 
     public Integer getId() {
         return id;
@@ -98,6 +102,14 @@ public class Order {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(List<Offer> offers) {
+        this.offers = offers;
     }
 }
 
