@@ -1,11 +1,14 @@
 package br.com.diego.mvc.mudi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "`order`")
+@JsonIgnoreProperties({"user"})
 public class Order {
 
     @Id

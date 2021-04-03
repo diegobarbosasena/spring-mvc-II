@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{base :: head ('Últimos Pedidos')}"></head>
+
+<body>
+
+<div th:replace="~{base :: logo}"></div>
+
+<div class="container">
+
+    <div th:replace="~{base :: pageTitle ('Últimos Pedidos')}"></div>
+
+    <div class="card mb-3 mt-3" th:each="order : ${orders}">
+
+        <div class="card-header alert alert-dark" th:text="${order.orderName}">
+            Nome do poduto
+        </div>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-sm-8 mb-3">
+
+                    <div class="row">
+                        <div class="col-md-5">
+                            Valor:
+                            <span th:if="${order.negotiatedValue != null}"
+                                  th:text="'R$ ' + ${#numbers.formatDecimal(order.negotiatedValue, 3, 'POINT', 2, 'COMMA')}">
+                                20000000,00
+                            </span>
+                        </div>
+
+                        <div class="col-md-7">
+                            Data de entrega:
+                            <span th:text="${#temporals.format(order.deliveryDate, 'dd/MM/yyyy')}">29/11/1993</span>
+                        </div>
+                    </div> <!-- end row -->
+
+                    <div>Produto</div>
+
+                    <div>
+                        <label for="orderUrl"></label>
+                        <input class="form-control" th:value="${order.orderUrl}" id="orderUrl"/>
+                    </div>
+
+                    <div>Descrição</div>
+
+                    <div>
+                        <label for="description"></label>
+                        <textarea class="form-control" th:text="${order.description}" id="description" cols="30"
+                                  rows="10">descriçao do pedido</textarea>
+                    </div>
+
+                </div> <!-- end col-12 -->
+
+                <div class="col-12 col-sm-4">
+                    <div>
+                        <img class="img-thumbnail" th:src="${order.orderImage}" alt="order image">
+                    </div>
+                </div> <!-- end col-12 -->
+            </div> <!-- end row -->
+        </div> <!-- end card-body -->
+    </div> <!--- end card -->
+</div> <!-- end container -->
+</body>
+</html>
