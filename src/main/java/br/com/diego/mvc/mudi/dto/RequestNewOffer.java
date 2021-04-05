@@ -2,17 +2,26 @@ package br.com.diego.mvc.mudi.dto;
 
 import br.com.diego.mvc.mudi.model.Offer;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class RequestNewOffer {
 
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("'dd/MM/yyyy");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     private Long orderId;
+
+    @Pattern(regexp = "^\\d+(\\.\\d{2})?$")
+    @NotNull
     private String value;
+
+    @Pattern(regexp = "^\\d{2}/\\d{2}/\\d{4}$")
+    @NotNull
     private String deliveryDate;
+
     private String comment;
 
     public Long getOrderId() {

@@ -5,10 +5,13 @@ import br.com.diego.mvc.mudi.model.Offer;
 import br.com.diego.mvc.mudi.model.Order;
 import br.com.diego.mvc.mudi.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -19,7 +22,7 @@ public class OfferRest {
     private OrderRepository orderRepository;
 
     @PostMapping
-    public Offer createOffer(RequestNewOffer request) {
+    public ResponseEntity<Offer> createOffer(@Valid @RequestBody RequestNewOffer request) {
 
         Optional<Order> responseOrder = orderRepository.findById(request.getOrderId());
 
@@ -33,6 +36,6 @@ public class OfferRest {
 
         orderRepository.save(order);
 
-        return newOffer;
+        return ResponseEntity.ok().body(newOffer);
     }
 }
